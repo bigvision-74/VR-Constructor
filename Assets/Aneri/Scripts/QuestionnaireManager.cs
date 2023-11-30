@@ -11,17 +11,20 @@ public class QuestionnaireManager : MonoBehaviour
     public TextMeshProUGUI outputText;
     public GameObject radioPanel, checkboxPanel_4, checkboxPanel_5, trueFalsePanel; // Panels for different answer types
     public List<Toggle> radioOptions, checkboxOptions_4, checkboxOptions_5;
-    public Button trueButton, falseButton;
+   // public Button trueButton, falseButton;
+    public Button nextProcessBtn;
 
     // refernce of the panel on the tablet.
     public GameObject processAnimPanel;
     public GameObject quizCanvas;
+    public GameObject qnAPanel;
     public GameObject congratsPanel;
+    public GameObject hideChecklistPanel;
 
     private Question currentQuestion;
     /*private List<int> userAnswers = new List<int>();*/
 
-    private int trueFalseAnswer = -1; // -1 indicates no selection
+   // private int trueFalseAnswer = -1; // -1 indicates no selection
 
     void Start()
     {
@@ -36,19 +39,33 @@ public class QuestionnaireManager : MonoBehaviour
             questionText.text = currentQuestion.questionText;
             Debug.Log(currentQuestion.options.Count);
             // Activate the correct panel and populate options based on answerType
-            // RadioButton Type.
+            // RadioButton Type with 4 options.
             if (currentQuestion.answerType == AnswerType.Radio)
             {
                 radioPanel.SetActive(true);
 
                 // Set up the options inside the radioPanel.
-                for (int i = 0; i < radioOptions.Count; i++)
+                for (int i = 0; i < currentQuestion.options.Count; i++)
                 {
+                    radioOptions[i].gameObject.SetActive(true);
                     radioOptions[i].isOn = false;
                     radioOptions[i].GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.options[i];
                 }
             }
-            
+
+            /*// RadioButton Type with 2 options.
+            if (currentQuestion.answerType == AnswerType.Radio && currentQuestion.options.Count.Equals(2))
+            {
+                radioPanel.SetActive(true);
+
+                // Set up the options inside the radioPanel.
+                for (int i = 0; i < radioOptions_2.Count; i++)
+                {
+                    radioOptions_2[i].isOn = false;
+                    radioOptions_2[i].GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.options[i];
+                }
+            }*/
+
             // Checkbox 4 options
             else if (currentQuestion.answerType == AnswerType.Checkbox && currentQuestion.options.Count.Equals(4))
             {
@@ -75,14 +92,14 @@ public class QuestionnaireManager : MonoBehaviour
                     checkboxOptions_5[i].GetComponentInChildren<TextMeshProUGUI>().text = currentQuestion.options[i];
                 }
             }
-            //true False
+            /*//true False
             else if (currentQuestion.answerType == AnswerType.TrueFalse)
-                trueFalsePanel.SetActive(true);
+                trueFalsePanel.SetActive(true);*/
         }
         
     }
 
-    public void OnTrueButtonPressed()
+  /*  public void OnTrueButtonPressed()
     {
         trueFalseAnswer = 1; // True is selected
     }
@@ -90,13 +107,15 @@ public class QuestionnaireManager : MonoBehaviour
     public void OnFalseButtonPressed()
     {
         trueFalseAnswer = 0; // False is selected
-    }
+    }*/
 
     public void OnSubmit()
     {
         bool isCorrect = false; // by default false.
 
-        if (currentQuestion.answerType == AnswerType.TrueFalse)
+        isCorrect = CheckAnswer();
+
+        /*if (currentQuestion.answerType == AnswerType.TrueFalse)
         {
             if (trueFalseAnswer != -1) // Ensure the user has made a selection
             {
@@ -107,22 +126,23 @@ public class QuestionnaireManager : MonoBehaviour
                 Debug.Log("Please make a selection");
                 outputText.text = "Please make a selection";
             }
-        }
-        else
+        }*/
+        /*else
         {
             isCorrect = CheckAnswer();
-        }
+        }*/
 
-        if (isCorrect)
+        /*if (isCorrect)
         {
             Debug.Log("Correct Answer");
+            nextProcessBtn.gameObject.SetActive(true);
             outputText.text = "Correct Answer" + " \n Feedback for the same";
         }  
         else
         {
             Debug.Log("Incorrect Answer");
             outputText.text = "Incorrect Answer"  + " \n Feedback for the same";
-        }
+        }*/
             
 
         // removing and disappearing the currentQuestion and its corrsponding answer panel.
@@ -131,9 +151,10 @@ public class QuestionnaireManager : MonoBehaviour
         if (currentQuestion.answerType == AnswerType.Radio)
         {
             // Set up the options inside the radioPanel.
-            for (int i = 0; i < radioOptions.Count; i++)
+            for (int i = 0; i < currentQuestion.options.Count; i++)
             {
                 radioOptions[i].isOn = false;
+                radioOptions[i].gameObject.SetActive(false);
             }
 
             radioPanel.SetActive(false);
@@ -166,18 +187,32 @@ public class QuestionnaireManager : MonoBehaviour
         else if (currentQuestion.answerType == AnswerType.TrueFalse)
             trueFalsePanel.SetActive(false);
 
-        // if there are no questions then close the congrats panel, quiz canvas and the tablet process panel.
-        if(questions.Count == 0)
+        // Handling the correct and incorrect answer.
+        if(isCorrect)
         {
-            congratsPanel.SetActive(false);
-            quizCanvas.SetActive(false);
-            processAnimPanel.SetActive(false);
+            Debug.Log("Correct Answer");
+            nextProcessBtn.gameObject.SetActive(true);
+            qnAPanel.SetActive(false);
+            outputText.text = "Correct Answer" + " \n Feedback for the same";
         }
         else
         {
-            DisplayRandomQuestion(); // Display another question
+
+            Debug.Log("Incorrect Answer");
+            outputText.text = "Incorrect Answer" + " \n Feedback for the same";
+
+            // If the user has reached to the last question, then display the nextProcess button.
+            if (questions.Count == 0)
+            {
+                nextProcessBtn.gameObject.SetActive(true);
+                qnAPanel.SetActive(false);
+            }
+            else
+            {
+                DisplayRandomQuestion(); // Display another question
+            }
         }
-        
+       
     }
 
     bool CheckAnswer()
@@ -187,7 +222,7 @@ public class QuestionnaireManager : MonoBehaviour
         // RadioButton Type answer.
         if (currentQuestion.answerType == AnswerType.Radio)
         {
-            for(int i = 0; i < radioOptions.Count; i++)
+            for(int i = 0; i < currentQuestion.options.Count; i++)
             {
                 if(radioOptions[i].isOn && i == currentQuestion.correctAnswers[0])
                 {
@@ -234,6 +269,12 @@ public class QuestionnaireManager : MonoBehaviour
         return false; // or false based on the checking
     }
 
-    // Additional methods to handle user interactions
-    // ...
+    // when the next process button gets clicked.
+    public void OnNextProcessBtnClicked()
+    {
+        congratsPanel.SetActive(false);
+        quizCanvas.SetActive(false);
+        processAnimPanel.SetActive(false);
+        hideChecklistPanel.SetActive(false);
+    }
 }

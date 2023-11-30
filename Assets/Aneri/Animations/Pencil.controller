@@ -41,7 +41,7 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af043bd62c023944e88fd7bcb76477a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quizGameObjectName: Cube
+  animName: Fencing
 --- !u!1102 &3976434804077755779
 AnimatorState:
   serializedVersion: 6
@@ -116,7 +116,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: 1cc6ce1c07f08954f8f367eb65accaad, type: 2}
-  m_Tag: 
+  m_Tag: Fencing
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 

@@ -6,7 +6,23 @@ using TMPro;
 
 public class CheckListCanvasManager : MonoBehaviour
 {
-    
+    public static CheckListCanvasManager Instance;
+
+    public GameObject hideChecklistPanel;
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     public void AnimationStartandInteractableOff(GameObject button)
     {
         button.GetComponent<Animator>().SetTrigger("Tick");
@@ -20,13 +36,16 @@ public class CheckListCanvasManager : MonoBehaviour
 
     public void nextProcessPanelActive(GameObject nextProcessPanel)
     {
-        StartCoroutine(Delay());
         nextProcessPanel.SetActive(true);
     }
 
-    private IEnumerator Delay()
+    public void HideChecklistPanel()
     {
-        yield return new WaitForSeconds(2f);
+        hideChecklistPanel.SetActive(true);
     }
+
+    
+
+
 
 }
