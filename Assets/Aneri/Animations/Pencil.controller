@@ -106,7 +106,7 @@ AnimatorState:
   m_Transitions:
   - {fileID: 6331129122358005829}
   m_StateMachineBehaviours:
-  - {fileID: 1063397394189645298}
+  - {fileID: 8050891045733580152}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
@@ -143,6 +143,19 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!114 &8050891045733580152
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2d09edb3032a51459640d6ae0e6bc57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animName: Fencing
 --- !u!1101 &8978363184614080130
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
